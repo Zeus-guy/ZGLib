@@ -20,11 +20,6 @@ public interface IEnergyItem extends IForgeItem {
 
     abstract int getEnergyPerUse(ItemStack stack);
 
-    default CompoundTag getOrCreateEnergyTag(ItemStack container) {
-
-        return container.getOrCreateTag();
-    }
-
     default int getRemainingEnergy(ItemStack container) {
 
         return getMaxEnergy(container) - getEnergy(container);
@@ -37,19 +32,19 @@ public interface IEnergyItem extends IForgeItem {
 
     default int getEnergy(ItemStack container) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = container.getOrCreateTag();
         return Math.min(tag.getInt("Energy"), getMaxEnergy(container));
     }
     
     default void setEnergy(ItemStack container, int energy) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = container.getOrCreateTag();
         tag.putInt("Energy", Math.max(0, Math.min(energy, getMaxEnergy(container))));
     }
 
     default int receiveEnergy(ItemStack container, int maxReceive, boolean simulate) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = container.getOrCreateTag();
         int stored = Math.min(tag.getInt("Energy"), getMaxEnergy(container));
         int receive = Math.min(Math.min(maxReceive, getReceive(container)), getRemainingEnergy(container));
 
@@ -62,7 +57,7 @@ public interface IEnergyItem extends IForgeItem {
 
     default int extractEnergy(ItemStack container, int maxExtract, boolean simulate) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = container.getOrCreateTag();
         int stored = Math.min(tag.getInt("Energy"), getMaxEnergy(container));
         int extract = Math.min(Math.min(maxExtract, getExtract(container)), stored);
 
