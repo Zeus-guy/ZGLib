@@ -19,68 +19,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
-public class EnergyKeepingRecipe implements CraftingRecipe {
-    private final ResourceLocation id;
-    private final ItemStack output;
-    private final NonNullList<Ingredient> recipeItems;
+public class EnergyKeepingRecipe extends ShapedRecipe {
 
-    public EnergyKeepingRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
-        this.id = id;
-        this.output = output;
-        this.recipeItems = recipeItems;
+    public EnergyKeepingRecipe(ResourceLocation id, ItemStack result, NonNullList<Ingredient> recipeItems) {
+        super(id, "Crafting", 3, 3, recipeItems, result);
     }
 
-    @Override
-    public boolean matches(CraftingContainer container, Level p_44003_) {
-        for(int i = 0; i <= container.getWidth() - 3; ++i) {
-           for(int j = 0; j <= container.getHeight() - 3; ++j) {
-              if (this.matches(container, i, j, true)) {
-                 return true;
-              }
-  
-              if (this.matches(container, i, j, false)) {
-                 return true;
-              }
-           }
-        }
-  
-        return false;
-    }
 
-    private boolean matches(CraftingContainer p_44171_, int p_44172_, int p_44173_, boolean p_44174_) {
-        for(int i = 0; i < p_44171_.getWidth(); ++i) {
-           for(int j = 0; j < p_44171_.getHeight(); ++j) {
-              int k = i - p_44172_;
-              int l = j - p_44173_;
-              Ingredient ingredient = Ingredient.EMPTY;
-              if (k >= 0 && l >= 0 && k < 3 && l < 3) {
-                 if (p_44174_) {
-                    ingredient = this.recipeItems.get(3 - k - 1 + l * 3);
-                 } else {
-                    ingredient = this.recipeItems.get(k + l * 3);
-                 }
-              }
-  
-              if (!ingredient.test(p_44171_.getItem(i + j * p_44171_.getWidth()))) {
-                 return false;
-              }
-           }
-        }
-  
-        return true;
-     }
 
     @Override
     public ItemStack assemble(CraftingContainer container) {
         
         int energy = 0;
-        ItemStack item = output.copy();
+        ItemStack item = getResultItem().copy();
         
         for (int i = 0; i < container.getContainerSize(); i++) {
             energy += container.getItem(i).getOrCreateTag().getInt("Energy");
@@ -92,28 +47,8 @@ public class EnergyKeepingRecipe implements CraftingRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int p_43999_, int p_44000_) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem() {
-        return output;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return Serializer.INSTANCE;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return RecipeType.CRAFTING;
     }
 
     static Map<String, Ingredient> keyFromJson(JsonObject p_44211_) {
@@ -238,11 +173,6 @@ public class EnergyKeepingRecipe implements CraftingRecipe {
         }
     }
 
-    public static ItemStack itemStackFromJson(JsonObject p_151275_) {
-        return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(p_151275_, true, true);
-    }
-
-
     public static class Serializer implements RecipeSerializer<EnergyKeepingRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final ResourceLocation ID = new ResourceLocation(ZGLib.MODID, "energy_keeping_recipe");
@@ -275,13 +205,24 @@ public class EnergyKeepingRecipe implements CraftingRecipe {
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, EnergyKeepingRecipe recipe) {
-            for (Ingredient ingredient : recipe.recipeItems) {
+            for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItem(recipe.output);
+            buffer.writeItem(recipe.getResultItem());
 
         }
+    }
+
+
+    @Override
+    public int getRecipeWidth() {
+        return 3;
+    }
+
+    @Override
+    public int getRecipeHeight() {
+        return 3;
     }
 
 }
