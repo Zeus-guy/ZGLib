@@ -31,6 +31,10 @@ public class EnergyItem extends Item implements IEnergyItem {
 
         tooltip.add(Component.literal(getEnergy(stack) + "/" + getMaxEnergy(stack) + " FE"));
 
+        if (getEnergyPerUse(stack) > 0) {
+            tooltip.add(Component.translatable("info.zglib.energy_use_1").append(Component.literal(" " + getEnergyPerUse(stack) + " FE/")).append(Component.translatable("info.zglib.energy_use_2")));
+        }
+
         List<Component> tooltips = addTooltips();
         if (!tooltips.isEmpty()) {
             tooltip.addAll(tooltips);
@@ -102,7 +106,7 @@ public class EnergyItem extends Item implements IEnergyItem {
             list.add(new ItemStack(this));
 
             ItemStack maxedItem = new ItemStack(this);
-            setEnergy(maxedItem, max_energy);
+            setEnergy(maxedItem, getMaxEnergy(maxedItem));
             list.add(maxedItem);
         }
 

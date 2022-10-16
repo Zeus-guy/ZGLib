@@ -1,5 +1,7 @@
 {
     "item.zglib.test_drill": "Test Drill",
     "info.zglib.hold_shift": "Hold Shift for advanced details",
-    "itemGroup.zglibtab": "ZGLib"
+    "itemGroup.zglibtab": "ZGLib",
+    "info.zglib.energy_use_1": "Uses",
+    "info.zglib.energy_use_2": "use"
 }
