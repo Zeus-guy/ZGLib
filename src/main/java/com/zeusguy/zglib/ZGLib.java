@@ -1,5 +1,6 @@
 package com.zeusguy.zglib;
 
+import com.zeusguy.zglib.recipe.ModRecipes;
 import com.zeusguy.zglib.registry.ZGLibItems;
 
 //import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class ZGLib {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ZGLibItems.register(modEventBus);
+
+        ModRecipes.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
