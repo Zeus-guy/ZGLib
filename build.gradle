@@ -123,6 +123,16 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+    maven {
+    // location of the maven that hosts JEI files
+    name = "Progwml6 maven"
+    url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 dependencies {
@@ -142,6 +152,12 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    // compile against the JEI API but do not include it at runtime
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.2-common-api:11.3.0.271"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.3.0.271"))
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.271"))
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

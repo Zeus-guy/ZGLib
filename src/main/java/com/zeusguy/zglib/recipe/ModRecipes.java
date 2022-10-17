@@ -4,7 +4,6 @@ package com.zeusguy.zglib.recipe;
 import com.zeusguy.zglib.ZGLib;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

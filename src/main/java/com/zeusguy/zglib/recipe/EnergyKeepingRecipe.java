@@ -26,7 +26,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 public class EnergyKeepingRecipe extends ShapedRecipe {
 
     public EnergyKeepingRecipe(ResourceLocation id, ItemStack result, NonNullList<Ingredient> recipeItems) {
-        super(id, "Crafting", 3, 3, recipeItems, result);
+        super(id, result.getDisplayName().toString(), 3, 3, recipeItems, result);
     }
 
 
